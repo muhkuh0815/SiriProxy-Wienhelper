@@ -30,9 +30,11 @@ require 'siren' #for sorting json hashes
 # 
 # "ich|habe" + "Durst|trinken|verdurste" = sucht öffentliche Trinkbrunnen in Wien
 #
-# "ich|brauche|wo" "WLAN|internet|WiFi" = sucht WLAN Multimediastationen in Wien
+# "ich|brauche|wo" + "WLAN|internet|WiFi" = sucht WLAN Multimediastationen in Wien
 #
-# "ich|wo" "Taxi" = sucht Taxistandplätze in Wien
+# "ich|wo" + "Taxi" = sucht Taxistandplätze in Wien
+#
+# "ich|wo" + "Polizei" = sucht Polizeistationen in Wien
 #
 #
 # Beispiele: Ich brauch ein Klo, Ich brauche ein Taxi, Ich habe Durst, Ich brauche Internet
@@ -49,7 +51,6 @@ require 'siren' #for sorting json hashes
 #
 #	preview video
 #
-#	polizei
 #	krankenhäuser
 #	mistplätze
 #	problemstoffsammelstellen mobil/stationär
@@ -467,6 +468,101 @@ listen_for /(ich|Wo).*(WiFi|Wlan|Multimedia|internet)/i do
     		daae = da["ent"]
     		sname = daas.to_s 
     		siri_location = SiriLocation.new(sname, daao.to_s, "","9", "AT", "Wien" , daala.to_s , daalo.to_s)
+    		map_snippet.items << SiriMapItem.new(label=sname , location=siri_location, detailType="BUSINESS_ITEM")
+    		z += 1
+ 		end
+		if x.to_s == 1	
+			say "Ich habe einen Eintrag gefunden."
+		else	
+			say "Ich habe " + x.to_s + " Einträge gefunden. Ich zeige Dir die 5 Nähesten."
+		end	
+		utterance = SiriAssistantUtteranceView.new("")
+    	add_views.views << utterance
+    	add_views.views << map_snippet
+    	send_object add_views #send_object takes a hash or a SiriObject object
+	end
+	request_completed
+	end
+end
+
+
+listen_for /(ich|Wo).*(Polizei)/i do 
+	if $maplo == NIL 
+		say "Kein GPS Signal", spoken: "Kein GPS Signal"
+	else
+		dos ="http://data.wien.gv.at/daten/wfs?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:POLIZEIOGD&srsName=EPSG:4326&outputFormat=json" #&MAXFEATURES=10"
+	end
+	begin
+		dos = URI.parse(URI.encode(dos)) # allows Unicharacters in the search URL
+		doc = Nokogiri::HTML(open(dos))
+		doc.encoding = 'utf-8'
+		doc = doc.text
+	rescue Timeout::Error
+     	doc = ""
+    end
+    if doc == ""
+    	say "Fehler beim Suchen", spoken: "Fehler beim Suchen" 
+    	request_completed
+    else
+	json = doc.to_s
+	empl = json
+	empl.chop
+	empl.reverse
+	empl.chop
+	empl.reverse
+	empl.gsub('\"', '"')
+	empl = JSON.parse(empl)
+	busi = empl["features"]
+	dat = {}
+	if busi == NIL
+		say "Keine Einträge gefunden."
+	else
+		lon2 = $maplo
+		lat2 = $mapla
+		x = 0
+		busi = busi.to_a
+		busi.each do |data|
+			coo = data["geometry"]
+    		coor = coo["coordinates"]
+    		daala = coor[1]
+    		daalo = coor[0]
+    		daa = data["properties"]
+    		daan = daa["NAME"]
+    		daas = daa["ADRESSE"]
+    		lon1 = daalo.to_f
+			lat1 = daala.to_f
+			if lon2 == NIL
+				say "Bitte Ortungsdienst einschalten."
+			else
+				haversine_distance( lat1, lon1, lat2, lon2 )
+				entf = @distances['km']
+				entf = (entf * 10**3).round.to_f / 10**3
+				datt = { "ent" => entf, "str" => daas.to_s, "lat" => daala.to_s, "lon" => daalo.to_s, "nam" => daan.to_s}
+				dat[entf] = datt	
+			end
+    		x += 1
+ 		end
+		datt = Siren.query "$[ /@ ]", dat   #sorting
+		dat = datt
+		y = 0
+		# maps anzeigen
+		add_views = SiriAddViews.new
+    	add_views.make_root(last_ref_id)
+    	map_snippet = SiriMapItemSnippet.new(true)
+		z = 0
+		while z <5 do
+			da = dat[z]
+			da = da[1]
+			daala = daala.to_f
+			daalo = daalo.to_f
+			daae = daae.to_f
+			daala = da["lat"]
+    		daalo = da["lon"]
+    		daas = da["str"]
+    		daan = da["nam"]
+    		daae = da["ent"]
+    		sname = daas.to_s 
+    		siri_location = SiriLocation.new(sname, daan.to_s, "","9", "AT", "Wien" , daala.to_s , daalo.to_s)
     		map_snippet.items << SiriMapItem.new(label=sname , location=siri_location, detailType="BUSINESS_ITEM")
     		z += 1
  		end
