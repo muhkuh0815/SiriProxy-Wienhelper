@@ -31,6 +31,12 @@ Danke an http://data.wien.gv.at für die Daten.
 
 "ich|wo" + "Citybike|Fahrrad" = sucht Citybikestationen in Wien
 
+"ich|wo" + "Krankenhaus|Spital" = sucht Krankenhäuser in Wien
+
+"ich|wo" + "schwimmen|Hallenbad" = sucht Hallenbäder in Wien
+
+"ich|wo" + "Freibad|Badeplatz" = sucht Badestellen an der Donau in Wien
+
 
 Beispiele: Ich brauch ein Klo, wo finde ich ein Taxi, Ich habe Durst, Ich brauche Internet, Ich brauche ein Fahrrad, wo ist die Polizei
 
@@ -67,15 +73,11 @@ gezielte Abfrage mit Loc. - um nicht immer alle Daten laden zu müssen
 
 preview video
 
-polizei
-krankenhäuser
 mistplätze
 problemstoffsammelstellen mobil/stationär
 defibrilatoren
-schwimmbäder/Badeplatz
 spielplatz
 veranstaltungen
-citybikes
 
 
 ###
