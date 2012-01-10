@@ -1,0 +1,8 @@
+
+COPY AND PASTE THE DATA FROM THE FOLLOWING LINK IN HERE
+
+BEWARE ITS ABOUT  42 MB 
+
+
+
+http://data.wien.gv.at/daten/wfs?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:BAUMOGD&srsName=EPSG:4326&outputFormat=json

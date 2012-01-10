@@ -21,12 +21,18 @@ Danke an http://data.wien.gv.at für die Daten.
  
 "ich|habe" + "Durst|trinken|verdurste" = sucht öffentliche Trinkbrunnen in Wien
 
-"ich|wo" "WLAN|internet|WiFi" = sucht WLAN Multimediastationen in Wien
+"ich|wo" + "WLAN|internet|WiFi" = sucht WLAN Multimediastationen in Wien
 
-"ich|wo" "Taxi" = sucht Taxistandplätze in Wien
+"ich|wo" + "Taxi" = sucht Taxistandplätze in Wien
+
+"ich|wo" + "Polizei" = sucht Polizeistationen in Wien
+
+"ich|wo" + "Baum|Bäume" = durchsucht das Baumkataster in Wien (dauert ca 15sek. >100.000 Einträge)
+
+"ich|wo" + "Citybike|Fahrrad" = sucht Citybikestationen in Wien
 
 
-Beispiele: Ich brauch ein Klo, wo finde ich ein Taxi, Ich habe Durst, Ich brauche Internet
+Beispiele: Ich brauch ein Klo, wo finde ich ein Taxi, Ich habe Durst, Ich brauche Internet, Ich brauche ein Fahrrad, wo ist die Polizei
 
 
 ###
