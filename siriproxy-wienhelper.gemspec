@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "httparty"
   s.add_runtime_dependency "json"
   s.add_runtime_dependency "siren"
-  #s.add_runtime_dependency "uri"
+  #s.add_runtime_dependency "RubyInline"
+  #s.add_runtime_dependency "geokit"
 end

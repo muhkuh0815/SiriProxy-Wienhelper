@@ -2,14 +2,14 @@
 # siriproxy-wienhelper 
 
 With this plugin you can find public restrooms, drinking fountains and free WiFi Multimediastations in Vienna - Austria.
-Thanks to http://data.wien.gv.at for the data
+Thanks to http://data.wien.gv.at for the WFS 1.1.0 data
 
  	Remember to add the plugin to the "/.siriproxy/config.yml" file!
  
 ###
 
 Das ist ein Plugin um öffentliche WC's, Trinkbrunnen und WLAN Multimediastationen in Wien zu finden.
-Danke an http://data.wien.gv.at für die Daten.
+Danke an http://data.wien.gv.at für die WFS 1.1.0 Daten.
  
  	Plugin in "/.siriproxy/config.yml" file hinzufügen !
 
@@ -27,7 +27,7 @@ Danke an http://data.wien.gv.at für die Daten.
 
 "ich|wo" + "Polizei" = sucht Polizeistationen in Wien
 
-"ich|wo" + "Baum|Bäume" = durchsucht das Baumkataster in Wien (dauert ca 15sek. >100.000 Einträge)
+"ich|wo" + "Baum|Bäume" = durchsucht das Baumkataster in Wien (dauert je nach Rechenpower ca 15sek. >120.000 Einträge)
 
 "ich|wo" + "Citybike|Fahrrad" = sucht Citybikestationen in Wien
 
@@ -37,8 +37,23 @@ Danke an http://data.wien.gv.at für die Daten.
 
 "ich|wo" + "Freibad|Badeplatz" = sucht Badestellen an der Donau in Wien
 
+"ich|wo" + "Museum" = sucht Museen in Wien
 
-Beispiele: Ich brauch ein Klo, wo finde ich ein Taxi, Ich habe Durst, Ich brauche Internet, Ich brauche ein Fahrrad, wo ist die Polizei
+"ich|wo" + "Burg|Schloss" = sucht Burgen und Schlösser in Wien
+
+"ich|wo" + "Spielplatz" = sucht Spielplätze in Wien
+
+"ich|wo" + "Sport|Sporthalle" = sucht Sportstätten in Wien
+
+"ich|wo" + "Mistplatz|Müllplatz" = sucht Mistplätze in Wien
+
+"ich|wo" + "Problemstoff" = sucht Problemstoffsammelstellen in Wien
+
+"ich|wo" + "Altstoff|Altglas|Altmetall" = sucht Altglas, Altmetall und Biomüll Container
+
+
+
+Beispiele: Ich brauch ein Klo, wo finde ich ein Taxi, Ich habe Durst, Ich brauche Internet, Ich brauche ein Fahrrad, wo ist die Polizei, wo kann ich schwimmen
 
 
 ###
@@ -71,12 +86,7 @@ Der richtige Eintrag in der config.yml Datei wäre dann:
 
 gezielte Abfrage mit Loc. - um nicht immer alle Daten laden zu müssen
 
-preview video
-
-mistplätze
-problemstoffsammelstellen mobil/stationär
 defibrilatoren
-spielplatz
 veranstaltungen
 
 
@@ -85,4 +95,4 @@ veranstaltungen
 
 bei Fragen Twitter: @muhkuh0815
 oder github.com/muhkuh0815/SiriProxy-Wienhelper
-Video Preview: noch kein Video
+Video Preview: http://www.youtube.com/watch?v=Z6j0UBDdX20

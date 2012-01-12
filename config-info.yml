@@ -12,5 +12,5 @@
 # and put it in e.g. /User/yourusername/Siriproxy/Plugins/siriproxy-wienhelper/
 # the lines in the config.yml file should then be
 
-    - name: 'Eyelp'
+    - name: 'Wienhelper'
       path: '/Users/yourusername/SiriProxy/plugins/siriproxy-wienhelper'
