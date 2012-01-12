@@ -108,9 +108,74 @@ class SiriProxy::Plugin::Wienhelper < SiriProxy::Plugin
 
 
 # WC/TOILET SEARCH
-listen_for /(ich|Wo).*(WC|Klo|toilette|Pinkeln|Häusl|pissen)/i do 
-	
-	zz = 5 # number of toilets shown / Anzahl der WCs
+listen_for /(ich|Wo).*(WC|Klo|Toilette|pinkeln|Häusl|pissen|stilles Örtchen)/i do 
+	response = ask "Brauchst du ein WC, oder tut es auch ein Baum ?"
+	if (response =~ /Baum/i)
+		baum()
+	else #nicht Baum
+		klo()
+	end
+request_completed
+end
+# WC/TOILET SEARCH
+
+
+# TRINKBRUNNEN/DRINKING FOUNTAIN SEARCH
+listen_for /(ich|Wo).*(Durst|Brunnen|trinken|trinkbrunnen|durstig)/i do 
+	brunnen()
+	request_completed
+end
+
+# TAXI/CAB SEARCH
+listen_for /(ich|Wo).*(Taxi|standplatz)/i do 
+	taxi()
+	request_completed
+end
+
+# WIFI/INTERNET SEARCH
+listen_for /(ich|Wo).*(Wi-Fi|Wlan|Multimedia|internet)/i do 
+	wifi()
+	request_completed
+end
+
+# POLIZEI/POLICE STATION SEARCH
+listen_for /(ich|Wo).*(Polizei)/i do 
+	polizei()
+	request_completed
+end
+
+# CITY BIKE SEARCH
+listen_for /(ich|Wo).*(Radfahren|City bike|fahrrad)/i do 
+	citybike()
+	request_completed
+end
+
+# HOSPITAL SEARCH
+listen_for /(ich|Wo).*(Spital|Krankenhaus)/i do 
+	spital()
+	request_completed
+end
+
+# SCHWIMMBAD SEARCH
+listen_for /(ich|Wo).*(Schwimmen|baden|schwimmbad|hallenbad)/i do 
+	schwimmbad()	
+	request_completed
+end
+
+# FREIBAD SEARCH
+listen_for /(ich|Wo).*(freibad|badeplatz|paradeplatz)/i do 
+	freibad()
+	request_completed
+end
+
+# BAUM/TREE SEARCH - FROM LOCAL FILE !!
+listen_for /(ich|Wo).*(Baum|Bäume|pinkeln)/i do 
+	baum()	
+	request_completed
+end
+
+def klo()
+	zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "OEFFWCOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -206,15 +271,11 @@ listen_for /(ich|Wo).*(WC|Klo|toilette|Pinkeln|Häusl|pissen)/i do
     		add_views.views << map_snippet
     		send_object add_views #send_object takes a hash or a SiriObject object
 		end
-		request_completed
 		end
 end
-# WC/TOILET SEARCH
 
-
-# TRINKBRUNNEN/DRINKING FOUNTAIN SEARCH
-listen_for /(ich|Wo).*(Durst|Brunnen|trinken|trinkbrunnen|durstig)/i do 
-	zz = 5 # number of toilets shown / Anzahl der WCs
+def brunnen()
+	zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "TRINKBRUNNENOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -291,15 +352,11 @@ listen_for /(ich|Wo).*(Durst|Brunnen|trinken|trinkbrunnen|durstig)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# TRINKBRUNNEN/DRINKING FOUNTAIN SEARCH
 
-
-# TAXI/CAB SEARCH
-listen_for /(ich|Wo).*(Taxi|standplatz)/i do 
-	zz = 5 # number of toilets shown / Anzahl der WCs
+def taxi()
+zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "TAXIOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -381,15 +438,11 @@ listen_for /(ich|Wo).*(Taxi|standplatz)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# TAXI/CAB SEARCH
 
-
-# WIFI/INTERNET SEARCH
-listen_for /(ich|Wo).*(Wi-Fi|Wlan|Multimedia|internet)/i do 
-	zz = 5 # number of entries shown / Anzahl der Ergebnisse
+def wifi()
+zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "MULTIMEDIAOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -469,15 +522,11 @@ listen_for /(ich|Wo).*(Wi-Fi|Wlan|Multimedia|internet)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# WIFI/INTERNET SEARCH
 
-
-# POLIZEI/POLICE STATION SEARCH
-listen_for /(ich|Wo).*(Polizei)/i do 
-	zz = 5 # number of toilets shown / Anzahl der WCs
+def polizei()
+zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "POLIZEIOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -559,15 +608,11 @@ listen_for /(ich|Wo).*(Polizei)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# POLIZEI/POLICE STATION SEARCH
 
-
-# CITY BIKE SEARCH
-listen_for /(ich|Wo).*(Radfahren|City bike|fahrrad)/i do 
-	zz = 5 # number of toilets shown / Anzahl der WCs
+def citybike()
+	zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "CITYBIKEOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -647,15 +692,11 @@ listen_for /(ich|Wo).*(Radfahren|City bike|fahrrad)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# CITY BIKE SEARCH
 
-
-# HOSPITAL SEARCH
-listen_for /(ich|Wo).*(Spital|Krankenhaus)/i do 
-	zz = 5 # number of entries shown / Anzahl der Einträge
+def spital()
+	zz = 5 # number of entries shown / Anzahl der Ergebnisse
 	ss = "KRANKENHAUSOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -735,15 +776,11 @@ listen_for /(ich|Wo).*(Spital|Krankenhaus)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# HOSPITAL SEARCH
 
-
-# SCHWIMMBAD SEARCH
-listen_for /(ich|Wo).*(Schwimmen|baden|schwimmbad|hallenbad)/i do 
-	zz = 10 # number of entries shown / Anzahl der Einträge
+def schwimmbad()
+	zz = 10 # number of entries shown / Anzahl der Ergebnisse
 	ss = "SCHWIMMBADOGD" 
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
@@ -823,14 +860,10 @@ listen_for /(ich|Wo).*(Schwimmen|baden|schwimmbad|hallenbad)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# SCHWIMMBAD SEARCH
 
-
-# FREIBAD SEARCH
-listen_for /(ich|Wo).*(freibad|badeplatz)/i do 
+def freibad()
 	zz = 10 # number of entries shown / Anzahl der Einträge
 	ss = "BADESTELLENOGD" 
 	if $maplo == NIL 
@@ -911,18 +944,12 @@ listen_for /(ich|Wo).*(freibad|badeplatz)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# FREIBAD SEARCH
 
-
-# BAUM/TREE SEARCH - FROM LOCAL FILE !!
-listen_for /(ich|Wo).*(Baum|Bäume|pinkeln)/i do 
-	say "need more Power !!!", spoken: ""
-	
+def baum()
+say "need more Power !!!", spoken: ""
 	zz = 40 # number of Trees / Anzahl der Bäume
-	
 	if $maplo == NIL 
 		say "Kein GPS Signal", spoken: "Kein GPS Signal"
 	else
@@ -1004,7 +1031,7 @@ listen_for /(ich|Wo).*(Baum|Bäume|pinkeln)/i do
     		daak = da["kro"]
     		daae = da["ent"]
     		daah = da["hoe"]
-    		sname = daao.to_s + " h:" + daah.to_s + " u:" + daab.to_s + " k:" + daak.to_s 
+    		sname = daao.to_s + " h:" + daah.to_s + "m k:" + daak.to_s + "m u:" + daab.to_s + "cm" 
     		siri_location = SiriLocation.new(sname, daas.to_s, daab.to_s,"9", "AT", "Wien" , daala.to_s , daalo.to_s)
     		map_snippet.items << SiriMapItem.new(label=sname , location=siri_location, detailType="BUSINESS_ITEM")
     		z += 1
@@ -1019,10 +1046,8 @@ listen_for /(ich|Wo).*(Baum|Bäume|pinkeln)/i do
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
 	end
-	request_completed
 	end
 end
-# BAUM/TREE SEARCH - FROM LOCAL FILE !!
 
 
 #    Thanks to http://www.esawdust.com/blog/businesscard/businesscard.html
