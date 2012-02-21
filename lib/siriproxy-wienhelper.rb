@@ -28,7 +28,7 @@ require 'siren' #for sorting json hashes
 #######
 ## ##  WIE ES FUNKTIONIERT
 #
-# "ich|muss|wo" + "Klo|WC|Pinkeln|Häusl"  = suche die nähesten 5 Toiletten in Wien
+# "ich|muss|wo" + "Klo|WC|Pinkeln|Häusl|Toilette"  = sucht  öffentliche Toiletten in Wien
 # 
 # "ich|habe" + "Durst|trinken|verdurste" = sucht öffentliche Trinkbrunnen in Wien
 #
@@ -117,7 +117,7 @@ class SiriProxy::Plugin::Wienhelper < SiriProxy::Plugin
 
 
 # WC/TOILET SEARCH
-listen_for /(ich|Wo).*(WC|Klo|Toilette|pinkeln|Häusl|pissen|stilles Örtchen)/i do 
+listen_for /(ich|Wo).*(WC|Klo|Kilo|Toilette|pinkeln|Häusl|pissen|stilles Örtchen)/i do 
 	response = ask "Brauchst du ein WC, oder tut es auch ein Baum ?"
 	if (response =~ /Baum/i)
 		baum(40)
@@ -221,7 +221,7 @@ end
 
 # BAUM/TREE SEARCH - FROM LOCAL FILE !!
 listen_for /(ich|Wo).*(Baum|Bäume|pinkeln)/i do 
-	baum(40)	
+	baum(100)	
 	request_completed
 end
 
@@ -248,6 +248,7 @@ def klo(zz)
 			lon2 = $maplo
 			lat2 = $mapla
 			x = 0
+			y = 0
 			dat = {}
 			busi = busi.to_a
 			busi.each do |data|
@@ -350,40 +351,40 @@ def show(zz, ss, eins, zwei, drei, auss)
 		busi = busi.to_a
 		print ss
 		busi.each do |data|
-			coo = data["geometry"]
-    		coor = coo["coordinates"]
+		  coo = data["geometry"]
+		  coor = coo["coordinates"]
     		if coo["type"] == "MultiLineString"
-    		coorr = coor[0]
-    		coorrr = coorr[0]
-    		daala = coorrr[1]
-    		daalo = coorrr[0]
+		  coorr = coor[0]
+		  coorrr = coorr[0]
+		  daala = coorrr[1]
+		  daalo = coorrr[0]
     		elsif coo["type"] == "MultiPoint"
-    		coorr = coor[0]
-    		daala = coorr[1]
-    		daalo = coorr[0]
+		  coorr = coor[0]
+		  daala = coorr[1]
+		  daalo = coorr[0]
     		else
-    		daala = coor[1]
-    		daalo = coor[0]
+		  daala = coor[1]
+		  daalo = coor[0]
     		end
     		daa = data["properties"]
     		daae = daa[eins]
     		daaz = daa[zwei]
     		if drei == ""
-    		daad = ""
+		  daad = ""
     		else
-    		daad = daa[drei]
+		  daad = daa[drei]
     		end    		
     		lon1 = daalo.to_f
-			lat1 = daala.to_f
-			if lon2 == NIL
-				say "Bitte Ortungsdienst einschalten."
-			else
-				haversine_distance( lat1, lon1, lat2, lon2 )
-				entf = @distances['km']
-				entf = (entf * 10**3).round.to_f / 10**3
-				datt = { "ent" => entf, "eins" => daae.to_s, "zwei" => daaz.to_s, "drei" => daad.to_s, "lat" => daala.to_s, "lon" => daalo.to_s}
-				dat[entf] = datt	
-			end
+		lat1 = daala.to_f
+		if lon2 == NIL
+		  say "Bitte Ortungsdienst einschalten."
+		else
+		  haversine_distance( lat1, lon1, lat2, lon2 )
+		  entf = @distances['km']
+		  entf = (entf * 10**3).round.to_f / 10**3
+		  datt = { "ent" => entf, "eins" => daae.to_s, "zwei" => daaz.to_s, "drei" => daad.to_s, "lat" => daala.to_s, "lon" => daalo.to_s}
+		  dat[entf] = datt	
+		end
     		x += 1
  		end
 		datt = Siren.query "$[ /@ ]", dat   #sorting
@@ -401,18 +402,18 @@ def show(zz, ss, eins, zwei, drei, auss)
 			daalo = daalo.to_f
 			daae = daae.to_f
 			daala = da["lat"]
-    		daalo = da["lon"]
-    		daae = da["eins"]
-    		daaz = da["zwei"]
-    		if drei == ""
- 		   	daad = ""
+			daalo = da["lon"]
+			daae = da["eins"]
+			daaz = da["zwei"]
+			if drei == ""
+			  daad = ""
  		   	else
- 		   	daad = da["drei"]
+			  daad = da["drei"]
  		   	end
  		   	sname = daae.to_s 
-    		siri_location = SiriLocation.new(sname, daaz.to_s, daad.to_s,"9", "AT", "Wien" , daala.to_s , daalo.to_s)
-    		map_snippet.items << SiriMapItem.new(label=sname , location=siri_location, detailType="BUSINESS_ITEM")
-    		z += 1
+			siri_location = SiriLocation.new(sname, daaz.to_s, daad.to_s,"9", "AT", "Wien" , daala.to_s , daalo.to_s)
+			map_snippet.items << SiriMapItem.new(label=sname , location=siri_location, detailType="BUSINESS_ITEM")
+			z += 1
  		end
 		if x.to_s == 1	
 			say "Ich habe einen Eintrag gefunden."
@@ -434,10 +435,10 @@ say "need more Power !!!", spoken: ""
 	else
 		# CAREFUL  appx 42 MB !!!
 		# dos ="http://data.wien.gv.at/daten/wfs?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:BAUMOGD&srsName=EPSG:4326&outputFormat=json"
-	end
+	
 	begin
 		#read from jstest2 file (42 MB) !!!
-		json = File.open("plugins/siriproxy-wienhelper/jstest2", "rb:utf-8")
+		json = File.open("/root/The-Three-Little-Pigs-Siri-Proxy/plugins/siriproxy-wienhelper/jstest2", "rb:utf-8")
 		doc = json.read
 		json.close
 	rescue Timeout::Error
@@ -460,9 +461,6 @@ say "need more Power !!!", spoken: ""
 			if lon2 == NIL
 				say "Bitte Ortungsdienst einschalten."
 			else
-				#webload
-				#m1 = Time.now.strftime("%M")
-				#s1 = Time.now.strftime("%S")
 				
 				empl.each_line do |data|
 				daa = data.to_s
@@ -471,20 +469,11 @@ say "need more Power !!!", spoken: ""
 				lat1 = daa["lat"].to_f
 				lon1 = daa['lon'].to_f
     			
-    			# appx 30 sec on my old mac
-    			#pa = Geokit::LatLng.new(lat1,lon1)
-    			#pb = Geokit::LatLng.new(lat2,lon2)
-				#entf = pa.distance_to(pb, :formula => :flat)
-    			
-    			# 31 sec
-    			haversine_distance( lat1, lon1, lat2, lon2 )
+				haversine_distance( lat1, lon1, lat2, lon2 )
 				entf = @distances['km']
 				entf = (entf * 10**3).round.to_f / 10**3
 				
-				# doesnt work, but should be way faster with inline
-				#entf = HaversineInline.distance( lat1, lon1, lat2, lon2)
-				
-				if entf < 0.2
+				if entf < 0.4
 					daak = daa["kro"]
     				daah = daa["hoe"]
     				daab = daa["umf"]
@@ -498,26 +487,19 @@ say "need more Power !!!", spoken: ""
 				end
 			end
 		end
-		
-		#m2 = Time.now.strftime("%M")
-		#s2 = Time.now.strftime("%S")
-		#m = m2.to_i - m1.to_i
-		#s = s2.to_i - s1.to_i
-		#if m = -59
-	#		m += 59
-	#		s += 60
-		#end
-		#print m.to_s + ":" + s.to_s
-
+	
 		dat = dat.to_a
 		da = dat.to_json
 		dat = JSON.parse(da)
 		dat = Siren.query "$[ /@.ent ]", dat   #sorting
 		y = 0
-		# maps anzeigen
+		zzz = dat.length
 		add_views = SiriAddViews.new
-    	add_views.make_root(last_ref_id)
-    	map_snippet = SiriMapItemSnippet.new(true)
+		add_views.make_root(last_ref_id)
+		map_snippet = SiriMapItemSnippet.new(true)
+		if zzz < zz 
+		  zz = zzz
+		end
 		z = 0
 		while z < zz do
 			da = dat[z].to_json
@@ -547,6 +529,7 @@ say "need more Power !!!", spoken: ""
     	add_views.views << utterance
     	add_views.views << map_snippet
     	send_object add_views #send_object takes a hash or a SiriObject object
+	end
 	end
 	end
 end
